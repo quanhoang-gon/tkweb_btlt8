@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Mua vé xem phim</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    table { border-collapse: collapse; width: 400px; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+    th { background-color: #f2f2f2; text-align: left; }
+    select, input, button { width: 100%; padding: 5px; }
+    button { cursor: pointer; background-color: #3498db; color: white; border: none; padding: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Mua vé</h2>
+  <form id="ticketForm">
+    <table>
+      <tr>
+        <th>Ngày chiếu</th>
+        <td><input type="date" id="date" required></td>
+      </tr>
+      <tr>
+        <th>Phim</th>
+        <td>
+          <select id="movie" required>
+            <option value="">-- Chọn phim --</option>
+            <option value="Yêu em bất chấp">Yêu em bất chấp</option>
+            <option value="Tháng năm rực rỡ">Tháng năm rực rỡ</option>
+            <option value="Và em sẽ đến">Và em sẽ đến</option>
+            <option value="Chuyện ma lúc 3 giờ sáng">Chuyện ma lúc 3 giờ sáng</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Suất chiếu</th>
+        <td>
+          <select id="showtime" required>
+            <option value="">-- Chọn suất chiếu --</option>
+            <option value="9h – 12h" data-price="45000">9h – 12h (45.000đ)</option>
+            <option value="13h – 16h" data-price="45000">13h – 16h (45.000đ)</option>
+            <option value="17h – 20h" data-price="55000">17h – 20h (55.000đ)</option>
+            <option value="22h – 2h" data-price="35000">22h – 2h (35.000đ)</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Phòng chiếu</th>
+        <td>
+          <select id="room" required>
+            <option value="">-- Chọn phòng --</option>
+            <option value="Đồng" data-multiplier="1.0">Đồng</option>
+            <option value="Bạc" data-multiplier="1.2">Bạc</option>
+            <option value="Vàng" data-multiplier="1.5">Vàng</option>
+            <option value="Kim Cương" data-multiplier="2.0">Kim Cương</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Chọn chỗ ngồi</th>
+        <td>
+          <select id="seats" multiple size="4">
+            <option>Ghế 01</option>
+            <option>Ghế 02</option>
+            <option>Ghế 03</option>
+            <option>Ghế 04</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:center;">
+          <button type="submit">Mua vé</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <script>
+    document.getElementById("ticketForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const date = document.getElementById("date").value;
+      const movie = document.getElementById("movie").value;
+      const showtimeEl = document.getElementById("showtime");
+      const showtime = showtimeEl.value;
+      const showPrice = showtimeEl.options[showtimeEl.selectedIndex].dataset.price;
+      const roomEl = document.getElementById("room");
+      const room = roomEl.value;
+      const multiplier = roomEl.options[roomEl.selectedIndex].dataset.multiplier;
+      const seats = Array.from(document.getElementById("seats").selectedOptions).map(o => o.value);
+
+      if (seats.length === 0) {
+        alert("Vui lòng chọn ít nhất 1 chỗ ngồi!");
+        return;
+      }
+
+      const ticketInfo = {
+        name: "Nguyễn Văn A",
+        date,
+        movie,
+        showtime,
+        room,
+        showPrice: Number(showPrice),
+        multiplier: Number(multiplier),
+        seats
+      };
+
+      // Lưu thông tin vào localStorage để gửi sang trang khác
+      localStorage.setItem("ticketData", JSON.stringify(ticketInfo));
+
+      // Chuyển sang trang in vé
+      window.location.href = "/Users/bhq/Desktop/BTLT7_TKWEB/bai19/vephim.html"
+    });
+  </script>
+</body>
+</html>

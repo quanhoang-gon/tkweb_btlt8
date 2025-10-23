@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thông tin vé</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    table { border-collapse: collapse; width: 350px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h2>Thông tin vé</h2>
+  <div id="ticketInfo"></div>
+
+  <script>
+    const data = JSON.parse(localStorage.getItem("ticketData"));
+    if (!data) {
+      document.getElementById("ticketInfo").innerHTML = "<p>Không có dữ liệu vé.</p>";
+    } else {
+      let total = 0;
+      let seatRows = "";
+
+      data.seats.forEach(seat => {
+        const price = data.showPrice * data.multiplier;
+        total += price;
+        seatRows += `
+          <tr>
+            <td>${seat}</td>
+            <td>${price.toLocaleString()} đ</td>
+          </tr>
+        `;
+      });
+
+      document.getElementById("ticketInfo").innerHTML = `
+        <table>
+          <tr><th>Khách hàng</th><td>${data.name}</td></tr>
+          <tr><th>Ngày chiếu</th><td>${data.date}</td></tr>
+          <tr><th>Phim</th><td>${data.movie}</td></tr>
+          <tr><th>Suất chiếu</th><td>${data.showtime}</td></tr>
+          <tr><th>Phòng chiếu</th><td>${data.room}</td></tr>
+        </table>
+        <br>
+        <table>
+          <tr><th>Ghế</th><th>Giá vé</th></tr>
+          ${seatRows}
+          <tr><th>Tổng tiền</th><th>${total.toLocaleString()} đ</th></tr>
+        </table>
+      `;
+    }
+  </script>
+</body>
+</html>
